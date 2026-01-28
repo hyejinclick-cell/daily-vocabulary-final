@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오늘의 영어 단어 챌린지</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            overflow: hidden;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        /* 설정 화면 */
+        .setup-screen h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 20px;
+        }
+
+        .word-count-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .word-count-btn {
+            background: #f7f7f9;
+            border: 2px solid #e0e0e5;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .word-count-btn:hover {
+            background: #f0f0f5;
+            transform: translateY(-2px);
+        }
+
+        .word-count-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .start-button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .start-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .start-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 학습 모드 */
+        .progress-container {
+            margin-bottom: 30px;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e5;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.4s ease;
+            border-radius: 10px;
+        }
+
+        .word-card {
+            text-align: center;
+            padding: 40px 20px;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .word-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .english-word {
+            font-size: 48px;
+            font-weight: 700;
+            color: #333;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .speaker-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .speaker-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .speaker-btn:active {
+            transform: scale(0.95);
+        }
+
+        .speaker-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .korean-meaning {
+            font-size: 24px;
+            color: #666;
+            animation: fadeIn 0.5s ease 0.2s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .skip-button {
+            width: 100%;
+            padding: 16px;
+            background: #f7f7f9;
+            color: #667eea;
+            border: 2px solid #e0e0e5;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .skip-button:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .prev-button, .next-button-study {
+            flex: 1;
+            padding: 16px;
+            background: #f7f7f9;
+            color: #667eea;
+            border: 2px solid #e0e0e5;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .prev-button:disabled, .next-button-study:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .prev-button:not(:disabled):hover, .next-button-study:not(:disabled):hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* 퀴즈 모드 */
+        .quiz-screen h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 20px;
+        }
+
+        .quiz-card {
+            text-align: center;
+            padding: 60px 20px;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            cursor: pointer;
+            background: #f7f7f9;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .quiz-card:hover {
+            background: #f0f0f5;
+        }
+
+        .quiz-word-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-word {
+            font-size: 48px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .quiz-speaker-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .quiz-speaker-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .quiz-speaker-btn:active {
+            transform: scale(0.95);
+        }
+
+        .quiz-speaker-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .quiz-answer {
+            font-size: 28px;
+            color: #667eea;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .quiz-answer.visible {
+            opacity: 1;
+        }
+
+        .quiz-hint {
+            color: #999;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        .next-button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .next-button.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .next-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .quiz-navigation-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .quiz-prev-button, .quiz-next-button {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-prev-button {
+            background: #f7f7f9;
+            color: #667eea;
+            border: 2px solid #e0e0e5;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .quiz-prev-button.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .quiz-prev-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .quiz-prev-button:not(:disabled):hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .quiz-next-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .quiz-next-button.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .quiz-next-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        /* 완료 화면 */
+        .completion-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .completion-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .completion-screen h2 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .completion-screen p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .restart-button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .restart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            background: transparent;
+            width: 100%;
+        }
+
+        .footer a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .english-word, .quiz-word {
+                font-size: 36px;
+            }
+
+            .korean-meaning {
+                font-size: 20px;
+            }
+
+            .quiz-answer {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="container">
+            <div class="header">
+                <h1>📚 오늘의 영어 단어 챌린지</h1>
+                <p>매일매일 영어 실력을 쌓아보세요!</p>
+            </div>
+
+        <!-- 설정 화면 -->
+        <div id="setupScreen" class="content setup-screen">
+            <h2>학습할 단어 개수를 선택하세요</h2>
+            <div class="word-count-buttons">
+                <button class="word-count-btn" data-count="10">10개</button>
+                <button class="word-count-btn" data-count="20">20개</button>
+                <button class="word-count-btn" data-count="30">30개</button>
+                <button class="word-count-btn" data-count="40">40개</button>
+                <button class="word-count-btn" data-count="50">50개</button>
+                <button class="word-count-btn" data-count="60">60개</button>
+                <button class="word-count-btn" data-count="70">70개</button>
+                <button class="word-count-btn" data-count="80">80개</button>
+                <button class="word-count-btn" data-count="90">90개</button>
+                <button class="word-count-btn" data-count="100">100개</button>
+            </div>
+            <button class="start-button" id="startButton" disabled>학습 시작</button>
+        </div>
+
+        <!-- 학습 모드 -->
+        <div id="studyScreen" class="content hidden">
+            <div class="progress-container">
+                <div class="progress-text" id="progressText">1 / 10</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+            <div class="word-card">
+                <div class="word-container">
+                    <div class="english-word" id="englishWord">Hello</div>
+                    <button class="speaker-btn" id="studySpeakerBtn">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="korean-meaning" id="koreanMeaning">안녕하세요</div>
+            </div>
+            <div class="navigation-buttons">
+                <button class="prev-button" id="prevButton">← 이전 단어</button>
+                <button class="next-button-study" id="skipButton">다음 단어 →</button>
+            </div>
+        </div>
+
+        <!-- 퀴즈 모드 -->
+        <div id="quizScreen" class="content hidden">
+            <h2>🎯 퀴즈 모드</h2>
+            <div class="quiz-card" id="quizCard">
+                <div class="quiz-word-container">
+                    <div class="quiz-word" id="quizWord">Hello</div>
+                    <button class="quiz-speaker-btn" id="quizSpeakerBtn">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="quiz-answer" id="quizAnswer">안녕하세요</div>
+                <div class="quiz-hint">카드를 클릭하여 정답 확인</div>
+            </div>
+            <div class="quiz-navigation-buttons">
+                <button class="quiz-prev-button" id="quizPrevButton">← 이전 문제</button>
+                <button class="quiz-next-button" id="nextButton">다음 문제 →</button>
+            </div>
+        </div>
+
+        <!-- 완료 화면 -->
+        <div id="completionScreen" class="content completion-screen hidden">
+            <div class="completion-icon">🎉</div>
+            <h2>오늘의 학습 완료!</h2>
+            <p>축하합니다!<br>오늘도 영어 실력이 한 단계 올랐어요.</p>
+            <button class="restart-button" id="restartButton">처음으로 돌아가기</button>
+        </div>
+    </div>
+    </div>
+
+    <div class="footer">
+        © 2026 <a href="https://github.com/nodamejin" target="_blank">@nodamejin</a>
+    </div>
+
+    <script>
+        // 토익 단어 데이터 (100개)
+        const wordData = [
+            { eng: "Accomplish", kor: "성취하다, 완수하다" },
+            { eng: "Accumulate", kor: "축적하다, 모으다" },
+            { eng: "Accurate", kor: "정확한" },
+            { eng: "Adjacent", kor: "인접한, 근처의" },
+            { eng: "Adequate", kor: "적절한, 충분한" },
+            { eng: "Advocate", kor: "옹호하다, 지지하다" },
+            { eng: "Allocate", kor: "할당하다, 배정하다" },
+            { eng: "Anticipate", kor: "예상하다, 예측하다" },
+            { eng: "Appraisal", kor: "평가, 감정" },
+            { eng: "Appropriate", kor: "적절한, 알맞은" },
+            { eng: "Authorize", kor: "권한을 주다, 인가하다" },
+            { eng: "Comprehensive", kor: "포괄적인, 종합적인" },
+            { eng: "Confidential", kor: "기밀의, 비밀의" },
+            { eng: "Consecutive", kor: "연속적인" },
+            { eng: "Considerable", kor: "상당한, 많은" },
+            { eng: "Consolidate", kor: "통합하다, 강화하다" },
+            { eng: "Constraint", kor: "제약, 제한" },
+            { eng: "Contingent", kor: "우발적인, ~에 달린" },
+            { eng: "Deteriorate", kor: "악화되다, 퇴화하다" },
+            { eng: "Diligent", kor: "근면한, 성실한" },
+            { eng: "Diminish", kor: "감소하다, 줄어들다" },
+            { eng: "Diplomatic", kor: "외교적인, 신중한" },
+            { eng: "Discrepancy", kor: "불일치, 차이" },
+            { eng: "Drastically", kor: "대폭, 과격하게" },
+            { eng: "Elaborate", kor: "정교한, 상세히 설명하다" },
+            { eng: "Eligible", kor: "자격이 있는" },
+            { eng: "Emphasize", kor: "강조하다" },
+            { eng: "Ensure", kor: "보장하다, 확실히 하다" },
+            { eng: "Escalate", kor: "확대되다, 단계적으로 증가하다" },
+            { eng: "Exceptional", kor: "예외적인, 뛰어난" },
+            { eng: "Excessive", kor: "과도한, 지나친" },
+            { eng: "Expedite", kor: "신속히 처리하다" },
+            { eng: "Expenditure", kor: "지출, 경비" },
+            { eng: "Facilitate", kor: "용이하게 하다, 촉진하다" },
+            { eng: "Fluctuate", kor: "변동하다, 오르내리다" },
+            { eng: "Implement", kor: "시행하다, 이행하다" },
+            { eng: "Implication", kor: "함축, 영향" },
+            { eng: "Incentive", kor: "장려책, 동기" },
+            { eng: "Inevitable", kor: "불가피한, 필연적인" },
+            { eng: "Infrastructure", kor: "기반시설, 하부구조" },
+            { eng: "Inhibit", kor: "억제하다, 금지하다" },
+            { eng: "Initiative", kor: "계획, 주도권" },
+            { eng: "Inspection", kor: "점검, 검사" },
+            { eng: "Integrate", kor: "통합하다" },
+            { eng: "Legitimate", kor: "합법적인, 정당한" },
+            { eng: "Lucrative", kor: "수익성이 높은" },
+            { eng: "Mandatory", kor: "의무적인, 필수적인" },
+            { eng: "Meticulous", kor: "세심한, 꼼꼼한" },
+            { eng: "Negligible", kor: "무시할 수 있는, 사소한" },
+            { eng: "Negotiate", kor: "협상하다" },
+            { eng: "Nominal", kor: "명목상의, 아주 적은" },
+            { eng: "Obsolete", kor: "구식의, 쓸모없는" },
+            { eng: "Optimize", kor: "최적화하다" },
+            { eng: "Oversight", kor: "감독, 실수" },
+            { eng: "Paramount", kor: "최고의, 가장 중요한" },
+            { eng: "Personnel", kor: "직원, 인사" },
+            { eng: "Postpone", kor: "연기하다" },
+            { eng: "Preliminary", kor: "예비의, 사전의" },
+            { eng: "Premises", kor: "건물, 구내" },
+            { eng: "Proactive", kor: "적극적인, 선제적인" },
+            { eng: "Proficiency", kor: "숙련도, 능숙함" },
+            { eng: "Prompt", kor: "신속한, 즉각적인" },
+            { eng: "Prospective", kor: "장래의, 예상되는" },
+            { eng: "Provision", kor: "조항, 공급" },
+            { eng: "Ratify", kor: "비준하다, 승인하다" },
+            { eng: "Reconcile", kor: "조정하다, 화해시키다" },
+            { eng: "Redundant", kor: "불필요한, 여분의" },
+            { eng: "Regulation", kor: "규정, 규제" },
+            { eng: "Reimburse", kor: "변상하다, 상환하다" },
+            { eng: "Reluctant", kor: "꺼리는, 마지못해 하는" },
+            { eng: "Remedy", kor: "해결책, 치료법" },
+            { eng: "Retrieve", kor: "되찾다, 검색하다" },
+            { eng: "Revenue", kor: "수익, 세입" },
+            { eng: "Rigorous", kor: "엄격한, 철저한" },
+            { eng: "Subsidiary", kor: "자회사, 보조의" },
+            { eng: "Substantial", kor: "상당한, 실질적인" },
+            { eng: "Sophisticated", kor: "정교한, 세련된" },
+            { eng: "Stagnant", kor: "침체된, 정체된" },
+            { eng: "Stringent", kor: "엄격한, 엄중한" },
+            { eng: "Suppress", kor: "억압하다, 진압하다" },
+            { eng: "Tentative", kor: "잠정적인, 임시의" },
+            { eng: "Terminate", kor: "종료하다, 해고하다" },
+            { eng: "Thorough", kor: "철저한, 완전한" },
+            { eng: "Transition", kor: "전환, 과도기" },
+            { eng: "Transparent", kor: "투명한, 명백한" },
+            { eng: "Unanimous", kor: "만장일치의" },
+            { eng: "Underlying", kor: "근본적인, 밑에 있는" },
+            { eng: "Unprecedented", kor: "전례없는, 공전의" },
+            { eng: "Undergo", kor: "겪다, 받다" },
+            { eng: "Utilize", kor: "활용하다, 이용하다" },
+            { eng: "Venture", kor: "모험적 사업, 벤처" },
+            { eng: "Versatile", kor: "다재다능한, 다용도의" },
+            { eng: "Viable", kor: "실행 가능한" },
+            { eng: "Vicinity", kor: "근처, 인근" },
+            { eng: "Vigorous", kor: "활기찬, 정력적인" },
+            { eng: "Volatile", kor: "변덕스러운, 불안정한" },
+            { eng: "Waive", kor: "포기하다, 면제하다" },
+            { eng: "Warrant", kor: "정당화하다, 보증하다" }
+        ];
+
+        // 상태 관리
+        let selectedCount = 0;
+        let currentIndex = 0;
+        let studyWords = [];
+        let quizWords = [];
+        let quizIndex = 0;
+        let answerRevealed = false;
+
+        // DOM 요소
+        const setupScreen = document.getElementById('setupScreen');
+        const studyScreen = document.getElementById('studyScreen');
+        const quizScreen = document.getElementById('quizScreen');
+        const completionScreen = document.getElementById('completionScreen');
+
+        const wordCountButtons = document.querySelectorAll('.word-count-btn');
+        const startButton = document.getElementById('startButton');
+        const prevButton = document.getElementById('prevButton');
+        const skipButton = document.getElementById('skipButton');
+        const nextButton = document.getElementById('nextButton');
+        const quizPrevButton = document.getElementById('quizPrevButton');
+        const restartButton = document.getElementById('restartButton');
+
+        const progressText = document.getElementById('progressText');
+        const progressFill = document.getElementById('progressFill');
+        const englishWord = document.getElementById('englishWord');
+        const koreanMeaning = document.getElementById('koreanMeaning');
+
+        const quizCard = document.getElementById('quizCard');
+        const quizWord = document.getElementById('quizWord');
+        const quizAnswer = document.getElementById('quizAnswer');
+
+        const studySpeakerBtn = document.getElementById('studySpeakerBtn');
+        const quizSpeakerBtn = document.getElementById('quizSpeakerBtn');
+
+        // TTS (Text-to-Speech) 함수
+        function speakWord(word) {
+            // 기존 음성이 재생 중이면 중지
+            window.speechSynthesis.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(word);
+            utterance.lang = 'en-US'; // 영어 발음
+            utterance.rate = 0.8; // 조금 천천히 (0.1 ~ 10)
+            utterance.pitch = 1; // 기본 음높이 (0 ~ 2)
+            utterance.volume = 1; // 볼륨 (0 ~ 1)
+            
+            // 모바일에서 더 나은 음성 선택 시도
+            const voices = window.speechSynthesis.getVoices();
+            
+            // 우선순위: Google 영어 음성 > 네이티브 영어 음성
+            const preferredVoices = [
+                'Google US English',
+                'Google UK English Female',
+                'Google UK English Male',
+                'Samantha',
+                'Alex',
+                'Karen',
+                'Daniel',
+                'Moira',
+                'Tessa'
+            ];
+            
+            // 선호하는 음성 찾기
+            let selectedVoice = null;
+            for (const voiceName of preferredVoices) {
+                selectedVoice = voices.find(voice => voice.name.includes(voiceName));
+                if (selectedVoice) break;
+            }
+            
+            // 선호 음성이 없으면 en-US 음성 중 첫 번째 선택
+            if (!selectedVoice) {
+                selectedVoice = voices.find(voice => voice.lang.startsWith('en-US') || voice.lang.startsWith('en_US'));
+            }
+            
+            if (selectedVoice) {
+                utterance.voice = selectedVoice;
+            }
+            
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // 음성 목록이 로드될 때까지 대기 (모바일에서 필요)
+        if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = function() {
+                // 음성 목록 로드 완료
+            };
+        }
+
+        // 단어 개수 선택
+        wordCountButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                wordCountButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                selectedCount = parseInt(button.dataset.count);
+                startButton.disabled = false;
+            });
+        });
+
+        // 학습 모드 스피커 버튼
+        studySpeakerBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // 이벤트 버블링 방지
+            const word = studyWords[currentIndex].eng;
+            speakWord(word);
+        });
+
+        // 퀴즈 모드 스피커 버튼
+        quizSpeakerBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // 이벤트 버블링 방지
+            const word = quizWords[quizIndex].eng;
+            speakWord(word);
+        });
+
+        // 학습 시작
+        startButton.addEventListener('click', () => {
+            // 랜덤하게 단어 선택
+            const shuffled = [...wordData].sort(() => Math.random() - 0.5);
+            studyWords = shuffled.slice(0, selectedCount);
+            currentIndex = 0;
+
+            showStudyScreen();
+            updateStudyCard();
+        });
+
+        // 학습 화면 표시
+        function showStudyScreen() {
+            setupScreen.classList.add('hidden');
+            studyScreen.classList.remove('hidden');
+            quizScreen.classList.add('hidden');
+            completionScreen.classList.add('hidden');
+        }
+
+        // 학습 카드 업데이트
+        function updateStudyCard() {
+            const word = studyWords[currentIndex];
+            englishWord.textContent = word.eng;
+            koreanMeaning.textContent = word.kor;
+            
+            progressText.textContent = `${currentIndex + 1} / ${selectedCount}`;
+            const progressPercent = ((currentIndex + 1) / selectedCount) * 100;
+            progressFill.style.width = `${progressPercent}%`;
+
+            // 첫 번째 단어면 이전 버튼 비활성화
+            prevButton.disabled = (currentIndex === 0);
+        }
+
+        // 다음 단어로
+        skipButton.addEventListener('click', () => {
+            currentIndex++;
+            
+            if (currentIndex >= selectedCount) {
+                startQuizMode();
+            } else {
+                updateStudyCard();
+            }
+        });
+
+        // 이전 단어로
+        prevButton.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateStudyCard();
+            }
+        });
+
+        // 퀴즈 모드 시작
+        function startQuizMode() {
+            // 학습한 단어를 랜덤하게 섞음
+            quizWords = [...studyWords].sort(() => Math.random() - 0.5);
+            quizIndex = 0;
+            answerRevealed = false;
+
+            studyScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            
+            updateQuizCard();
+        }
+
+        // 퀴즈 카드 업데이트
+        function updateQuizCard() {
+            const word = quizWords[quizIndex];
+            quizWord.textContent = word.eng;
+            quizAnswer.textContent = word.kor;
+            quizAnswer.classList.remove('visible');
+            nextButton.classList.remove('visible');
+            quizPrevButton.classList.remove('visible');
+            answerRevealed = false;
+        }
+
+        // 퀴즈 카드 클릭 (정답 확인)
+        quizCard.addEventListener('click', () => {
+            if (!answerRevealed) {
+                quizAnswer.classList.add('visible');
+                nextButton.classList.add('visible');
+                quizPrevButton.classList.add('visible');
+                
+                // 첫 번째 문제면 이전 버튼 비활성화
+                quizPrevButton.disabled = (quizIndex === 0);
+                
+                answerRevealed = true;
+            }
+        });
+
+        // 다음 퀴즈 문제
+        nextButton.addEventListener('click', () => {
+            quizIndex++;
+            
+            if (quizIndex >= quizWords.length) {
+                showCompletionScreen();
+            } else {
+                updateQuizCard();
+            }
+        });
+
+        // 이전 퀴즈 문제
+        quizPrevButton.addEventListener('click', () => {
+            if (quizIndex > 0) {
+                quizIndex--;
+                updateQuizCard();
+            }
+        });
+
+        // 완료 화면 표시
+        function showCompletionScreen() {
+            quizScreen.classList.add('hidden');
+            completionScreen.classList.remove('hidden');
+        }
+
+        // 처음으로 돌아가기
+        restartButton.addEventListener('click', () => {
+            selectedCount = 0;
+            currentIndex = 0;
+            studyWords = [];
+            quizWords = [];
+            quizIndex = 0;
+            answerRevealed = false;
+
+            wordCountButtons.forEach(btn => btn.classList.remove('active'));
+            startButton.disabled = true;
+
+            completionScreen.classList.add('hidden');
+            setupScreen.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
