@@ -173,6 +173,7 @@
 
         .word-container {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 15px;
@@ -308,6 +309,7 @@
 
         .quiz-word-container {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 15px;
@@ -566,12 +568,12 @@
             </div>
             <div class="word-card">
                 <div class="word-container">
-                    <div class="english-word" id="englishWord">Hello</div>
                     <button class="speaker-btn" id="studySpeakerBtn">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
                         </svg>
                     </button>
+                    <div class="english-word" id="englishWord">Hello</div>
                 </div>
                 <div class="korean-meaning" id="koreanMeaning">안녕하세요</div>
             </div>
@@ -586,12 +588,12 @@
             <h2>🎯 퀴즈 모드</h2>
             <div class="quiz-card" id="quizCard">
                 <div class="quiz-word-container">
-                    <div class="quiz-word" id="quizWord">Hello</div>
                     <button class="quiz-speaker-btn" id="quizSpeakerBtn">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
                         </svg>
                     </button>
+                    <div class="quiz-word" id="quizWord">Hello</div>
                 </div>
                 <div class="quiz-answer" id="quizAnswer">안녕하세요</div>
                 <div class="quiz-hint">카드를 클릭하여 정답 확인</div>
