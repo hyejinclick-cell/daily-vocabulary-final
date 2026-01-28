@@ -110,7 +110,7 @@
 
         .word-count-buttons {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr;
             gap: 12px;
             margin-bottom: 30px;
         }
@@ -118,13 +118,26 @@
         .word-count-btn {
             background: #f7f7f9;
             border: 2px solid #e0e0e5;
-            padding: 18px;
+            padding: 20px;
             border-radius: 12px;
             font-size: 18px;
             font-weight: 600;
             color: #555;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .difficulty-label {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .word-count-label {
+            font-size: 14px;
+            opacity: 0.7;
         }
 
         .word-count-btn:hover {
@@ -569,18 +582,28 @@
 
         <!-- 설정 화면 -->
         <div id="setupScreen" class="content setup-screen">
-            <h2>학습할 단어 개수를 선택하세요</h2>
+            <h2>난이도를 선택하세요</h2>
             <div class="word-count-buttons">
-                <button class="word-count-btn" data-count="10">10개</button>
-                <button class="word-count-btn" data-count="20">20개</button>
-                <button class="word-count-btn" data-count="30">30개</button>
-                <button class="word-count-btn" data-count="40">40개</button>
-                <button class="word-count-btn" data-count="50">50개</button>
-                <button class="word-count-btn" data-count="60">60개</button>
-                <button class="word-count-btn" data-count="70">70개</button>
-                <button class="word-count-btn" data-count="80">80개</button>
-                <button class="word-count-btn" data-count="90">90개</button>
-                <button class="word-count-btn" data-count="100">100개</button>
+                <button class="word-count-btn" data-count="10">
+                    <span class="difficulty-label">🌱 Easy</span>
+                    <span class="word-count-label">10단어</span>
+                </button>
+                <button class="word-count-btn" data-count="20">
+                    <span class="difficulty-label">⭐ Normal</span>
+                    <span class="word-count-label">20단어</span>
+                </button>
+                <button class="word-count-btn" data-count="30">
+                    <span class="difficulty-label">🔥 Hard</span>
+                    <span class="word-count-label">30단어</span>
+                </button>
+                <button class="word-count-btn" data-count="40">
+                    <span class="difficulty-label">💎 Expert</span>
+                    <span class="word-count-label">40단어</span>
+                </button>
+                <button class="word-count-btn" data-count="50">
+                    <span class="difficulty-label">👑 Master</span>
+                    <span class="word-count-label">50단어</span>
+                </button>
             </div>
             <button class="start-button" id="startButton" disabled>학습 시작</button>
         </div>
