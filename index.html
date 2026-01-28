@@ -58,6 +58,33 @@
             text-align: center;
         }
 
+        .home-button {
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid #e0e0e5;
+            color: #667eea;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .home-button:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: scale(1.1);
+        }
+
+        .home-button.hidden {
+            display: none;
+        }
+
         .header h1 {
             font-size: 24px;
             font-weight: 700;
@@ -560,6 +587,7 @@
 
         <!-- 학습 모드 -->
         <div id="studyScreen" class="content hidden">
+            <button class="home-button" id="homeButton">🏠</button>
             <div class="progress-container">
                 <div class="progress-text" id="progressText">1 / 10</div>
                 <div class="progress-bar">
@@ -585,6 +613,7 @@
 
         <!-- 퀴즈 모드 -->
         <div id="quizScreen" class="content hidden">
+            <button class="home-button" id="homeButtonQuiz">🏠</button>
             <h2>🎯 퀴즈 모드</h2>
             <div class="quiz-card" id="quizCard">
                 <div class="quiz-word-container">
@@ -606,6 +635,7 @@
 
         <!-- 완료 화면 -->
         <div id="completionScreen" class="content completion-screen hidden">
+            <button class="home-button" id="homeButtonComplete">🏠</button>
             <div class="completion-icon">🎉</div>
             <h2>오늘의 학습 완료!</h2>
             <p>축하합니다!<br>오늘도 영어 실력이 한 단계 올랐어요.</p>
@@ -735,6 +765,9 @@
         const quizScreen = document.getElementById('quizScreen');
         const completionScreen = document.getElementById('completionScreen');
 
+        const homeButton = document.getElementById('homeButton');
+        const homeButtonQuiz = document.getElementById('homeButtonQuiz');
+        const homeButtonComplete = document.getElementById('homeButtonComplete');
         const wordCountButtons = document.querySelectorAll('.word-count-btn');
         const startButton = document.getElementById('startButton');
         const prevButton = document.getElementById('prevButton');
@@ -850,6 +883,35 @@
             quizScreen.classList.add('hidden');
             completionScreen.classList.add('hidden');
         }
+
+        // 홈으로 돌아가기 함수
+        function goToHome() {
+            // 상태 초기화
+            selectedCount = 0;
+            currentIndex = 0;
+            studyWords = [];
+            quizWords = [];
+            quizIndex = 0;
+            answerRevealed = false;
+
+            wordCountButtons.forEach(btn => btn.classList.remove('active'));
+            startButton.disabled = true;
+
+            // 메인 화면으로
+            studyScreen.classList.add('hidden');
+            quizScreen.classList.add('hidden');
+            completionScreen.classList.add('hidden');
+            setupScreen.classList.remove('hidden');
+        }
+
+        // 홈 버튼 클릭 이벤트 (학습 모드)
+        homeButton.addEventListener('click', goToHome);
+
+        // 홈 버튼 클릭 이벤트 (퀴즈 모드)
+        homeButtonQuiz.addEventListener('click', goToHome);
+
+        // 홈 버튼 클릭 이벤트 (완료 화면)
+        homeButtonComplete.addEventListener('click', goToHome);
 
         // 학습 카드 업데이트
         function updateStudyCard() {
